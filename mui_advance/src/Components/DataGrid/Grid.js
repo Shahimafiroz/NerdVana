@@ -20,10 +20,12 @@ const ColorButton = styled(Button)(({ theme }) => ({
 
 const rows = Data;
 console.log(rows);
-
+/////////////////////////////////////// function starts  /////////////////////
 function Grid() {
+  // -------------------------------------------------- States ------------------------------------------//
   const [rowData, setRowData] = useState([]);
   const [open, setOpen] = useState(false);
+  const [addOrEditState, setaddOrEditState] = useState("edit");
   const [userState, setuserState] = useState({
     name: "",
     username: "",
@@ -33,14 +35,17 @@ function Grid() {
     issueDate: "",
     returnDate: "",
   });
-
+  //----------------------------------------------- Edit logic ----------------------------------------------------//
   const handelEditButton = (editRows) => {
     console.log("logging from handel edit button");
     console.log(editRows);
     setuserState(editRows);
     console.log(userState);
     commonHandel();
+    setaddOrEditState("edit");
   };
+
+  //---------------------------------------------- columns --------------------------------------------------------//
 
   const columns = [
     { field: "id", headerName: "ID", width: 90 },
@@ -82,7 +87,7 @@ function Grid() {
       width: 150,
       editable: true,
     },
-
+    ///////////////////////////////////               Actions                     /////////////////////
     {
       field: "actions",
       headerName: "Actions",
@@ -92,7 +97,13 @@ function Grid() {
         <GridActionsCellItem
           key={params}
           icon={<EditIcon />}
-          onClick={() => handelEditButton(params.row)}
+          onClick={() => {
+            setaddOrEditState("edit");
+            return handelClickOfEditandAdduserButton(
+              addOrEditState,
+              params.row
+            );
+          }}
         />,
         <GridActionsCellItem
           icon={<DeleteIcon />}
@@ -101,8 +112,22 @@ function Grid() {
       ],
     },
   ];
+  //-------------------------------------- Add or edit ???  logic ---------------------------------------->//
 
-  //<------------------------------------  Add  user from logic ----------------------------------------->//
+  const handelClickOfEditandAdduserButton = (
+    addOrEditState,
+    datafromEditButton
+  ) => {
+    if (addOrEditState == "add") {
+      console.log("add");
+      pushUserinRowDataStateOnClickOfTheButtton();
+    } else {
+      console.log(datafromEditButton);
+      handelEditButton();
+    }
+  };
+
+  //<------------------------------------------  Add logic -------------------------------------------------------->//
 
   // handling display state
   const commonHandel = () => {
@@ -122,6 +147,7 @@ function Grid() {
   // setting the new user using state and spread operator
   const pushUserinRowDataStateOnClickOfTheButtton = () => {
     // setRowData(userState)
+    commonHandel();
     console.log("The Button from Add component was clicked");
     console.log(userState);
     let updatedState = { ...userState, id: Date.now() };
@@ -139,6 +165,7 @@ function Grid() {
   };
 
   //-----------end ----------------------//
+
   return (
     // parent div starts
     <>
@@ -179,23 +206,26 @@ function Grid() {
           </div>
         </div>
         {/* grid ends */}
-        {/* Add user Buttons */}
+        {/*         ------------------------------------------------------- Add user Buttons ---------------------------------------------------            */}
         <div style={{}}>
           <ColorButton
             sx={{ color: "white" }}
             variant="contained"
-            onClick={commonHandel}
+            onClick={() => {
+              setaddOrEditState("add");
+              handelClickOfEditandAdduserButton(addOrEditState, {});
+            }}
           >
             + Add User
           </ColorButton>
         </div>
-        {/* conoditional rendering */}
+        {/* ------------------------------------------conoditional rendering--------------------------------------------- */}
         {/* {open ? displayAddDataForm() : <></>} */}
       </div>
 
       <DialogueComp
         pushUserinRowDataStateOnClickOfTheButtton={
-          pushUserinRowDataStateOnClickOfTheButtton
+          handelClickOfEditandAdduserButton
         }
         handelNewUserState={handelNewUserState}
         userState={userState}

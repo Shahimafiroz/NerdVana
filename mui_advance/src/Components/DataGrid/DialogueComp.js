@@ -103,7 +103,7 @@ function DialogueComp({
               }}
             ></div>
             <div>
-              <Box sx={{ flexGrow: 1, justifyContent: "center" }}>
+              <Box sx={{ flexGrow: 1 }}>
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={12} md={6}>
                     <Item>
@@ -117,7 +117,7 @@ function DialogueComp({
                         <Box
                           component="form"
                           sx={{
-                            "& .MuiTextField-root": { m: 1, width: "50ch" },
+                            "& .MuiTextField-root": { m: 1 },
                           }}
                           noValidate
                           autoComplete="off"
@@ -175,7 +175,10 @@ function DialogueComp({
                         <Box
                           component="form"
                           sx={{
-                            "& .MuiTextField-root": { m: 1, width: "50ch" },
+                            "& .MuiTextField-root": {
+                              m: 1,
+                              width: "50%",
+                            },
                           }}
                           noValidate
                           autoComplete="off"
@@ -217,13 +220,6 @@ function DialogueComp({
                         </Box>
                       </div>
                       {/* other  */}
-                      <div
-                        style={{
-                          padding: "1rem",
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
-                      ></div>
                     </Item>
                   </Grid>
                 </Grid>
@@ -252,7 +248,7 @@ function DialogueComp({
               variant="contained"
               onClick={pushUserinRowDataStateOnClickOfTheButtton}
             >
-              + Add User
+              + SAVE
             </ColorButton>
           </div>
           {/* <Button type="submit">Subscribe</Button> */}
