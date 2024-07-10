@@ -112,20 +112,6 @@ function Grid() {
       ],
     },
   ];
-  //-------------------------------------- Add or edit ???  logic ---------------------------------------->//
-
-  const handelClickOfEditandAdduserButton = (
-    addOrEditState,
-    datafromEditButton
-  ) => {
-    if (addOrEditState == "add") {
-      console.log("add");
-      pushUserinRowDataStateOnClickOfTheButtton();
-    } else {
-      console.log(datafromEditButton);
-      handelEditButton();
-    }
-  };
 
   //<------------------------------------------  Add logic -------------------------------------------------------->//
 
@@ -164,8 +150,22 @@ function Grid() {
     });
   };
 
-  //-----------end ----------------------//
+  //-------------------------------------- Add or edit ???  logic ---------------------------------------->//
 
+  const handelClickOfEditandAdduserButton = (
+    addOrEditState,
+    datafromEditButton
+  ) => {
+    if (addOrEditState == "add") {
+      console.log("add");
+      // handelNewUserState();  -->  i defined this here for the (name) error
+      pushUserinRowDataStateOnClickOfTheButtton();
+    } else {
+      console.log(datafromEditButton);
+      handelEditButton(datafromEditButton);
+    }
+  };
+  //-----------end ----------------------//
   return (
     // parent div starts
     <>
