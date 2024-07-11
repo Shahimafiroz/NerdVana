@@ -30,6 +30,8 @@ const ColorButton = styled(Button)(({ theme }) => ({
 }));
 
 function DialogueComp({
+  addEditOrDeleteState,
+  editDataHandler,
   pushUserinRowDataStateOnClickOfTheButtton,
   handelNewUserState,
   userState,
@@ -53,17 +55,16 @@ function DialogueComp({
         }}
         open={open}
         onClose={commonHandel}
-        // PaperProps={{
-        //   component: "form",
-        //   onSubmit: (event) => {
-        //     // event.preventDefault();
-        //     // const formData = new FormData(event.currentTarget);
-        //     // const formJson = Object.fromEntries(formData.entries());
-        //     // const email = formJson.email;
-        //     // console.log(email);
-        //     // commonHandel();
-        //   },
-        // }}
+        PaperProps={{
+          onSubmit: (event) => {
+            event.preventDefault();
+            // const formData = new FormData(event.currentTarget);
+            // const formJson = Object.fromEntries(formData.entries());
+            // const email = formJson.email;
+            // console.log(email);
+            commonHandel();
+          },
+        }}
       >
         <DialogTitle>
           <Typography
@@ -115,7 +116,6 @@ function DialogueComp({
                         }}
                       >
                         <Box
-                          component="form"
                           sx={{
                             "& .MuiTextField-root": { m: 1, width: "50ch" },
                           }}
@@ -173,7 +173,6 @@ function DialogueComp({
                         }}
                       >
                         <Box
-                          component="form"
                           sx={{
                             "& .MuiTextField-root": { m: 1, width: "50ch" },
                           }}
@@ -234,6 +233,7 @@ function DialogueComp({
         <DialogActions>
           {/* <Button onClick={commonHandel}>Cancel</Button> */}
           <ColorButton
+            type="submit"
             sx={{ color: "white" }}
             variant="contained"
             onClick={commonHandel}
@@ -247,13 +247,26 @@ function DialogueComp({
               justifyContent: "space-between",
             }}
           >
-            <ColorButton
-              type="submit"
-              variant="contained"
-              onClick={pushUserinRowDataStateOnClickOfTheButtton}
-            >
-              + Add User
-            </ColorButton>
+            {/*  */}
+
+            {addEditOrDeleteState == "edit" ? (
+              <ColorButton
+                type="submit"
+                variant="contained"
+                onClick={editDataHandler}
+              >
+                {" "}
+                + Save Edit{" "}
+              </ColorButton>
+            ) : (
+              <ColorButton
+                type="submit"
+                variant="contained"
+                onClick={pushUserinRowDataStateOnClickOfTheButtton}
+              >
+                + Save User
+              </ColorButton>
+            )}
           </div>
           {/* <Button type="submit">Subscribe</Button> */}
         </DialogActions>

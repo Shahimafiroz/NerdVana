@@ -7,7 +7,6 @@ import EditIcon from "@mui/icons-material/Edit";
 import { styled } from "@mui/material/styles";
 import Button from "@mui/material/Button";
 import DialogueComp from "./DialogueComp";
-import DeleteDialogue from "./DeleteDialogue";
 
 const ColorButton = styled(Button)(({ theme }) => ({
   width: "18rem",
@@ -23,16 +22,14 @@ console.log(rows);
 //  --------------------------------------------------------- function starts ------------------------------------------------------------------------ //
 function Grid() {
   const [rowData, setRowData] = useState([]);
-  const [delopen, setdelOpen] = useState(false);
   const [open, setOpen] = useState(false);
-  const [addEditOrDeleteState, setaddEditOrDeleteState] = useState("add");
+  const [editOrAddState, seteditOrAddState] = useState("add");
   const [userState, setuserState] = useState({
     name: "",
     username: "",
     email: "",
     bookReturned: "",
     bookName: "",
-    issueDate: "",
     returnDate: "",
   });
 
@@ -42,12 +39,6 @@ function Grid() {
     {
       field: "name",
       headerName: "Name",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "username",
-      headerName: "User Name",
       width: 150,
       editable: true,
     },
@@ -93,11 +84,17 @@ function Grid() {
         <GridActionsCellItem
           key={params}
           icon={<EditIcon />}
-          onClick={() => handelEditButton(params.row)}
+          onClick={() => {
+            setuserState(params.row);
+            return AddOrEdit("edit", params.row);
+          }}
         />,
         <GridActionsCellItem
           icon={<DeleteIcon />}
-          onClick={() => handelDeleteButton(params.row)}
+          onClick={() => {
+            setuserState(params.row);
+            return handelDeleteButton("del", params.row);
+          }}
         />,
       ],
     },
@@ -105,65 +102,59 @@ function Grid() {
 
   // ----------------------------------------    HANDEL EDIT OR ADD or Delete LOGIC   -----------------------------------------||
 
-  // ------------------------------------------------------Edit Logic -------------------------------------------------- //
-  const handelEditButton = (editRow) => {
-    console.log(editRow);
-
-    setaddEditOrDeleteState("edit");
-    setuserState(editRow);
-    commonHandel();
-    // const updatedArray = rowData.map((eachRow) => {
-    //   if (eachRow.id == userState.id) {
-    //     return userState;
-    //   } else {
-    //     return eachRow;
-    //   }
-    // });
-    // console.log(updatedArray);
-    // setRowData(updatedArray);
+  const AddOrEdit = (editDeleteorAddReference, rowObjfromEditOrDelete) => {
+    if (editDeleteorAddReference == "add") {
+      console.log("Add function will be called");
+      commonHandel();
+    } else if (editDeleteorAddReference == "edit") {
+      console.log("Edit function will be called ");
+      // console.log(rowObjfromEdit);
+      handelEditButton(rowObjfromEditOrDelete);
+    } else if (editDeleteorAddReference == "del") {
+      handelDeleteButton(rowObjfromEditOrDelete);
+    }
   };
-  const editDataHandler = () => {
-    console.log(userState);
-    const updatedArray = rowData.map((eachRow) => {
-      if (eachRow.id == userState.id) {
-        return userState;
-      } else {
-        return eachRow;
-      }
-    });
-    console.log(updatedArray);
-    setRowData(updatedArray);
+
+  // ------------------------------------------------------Edit Logic -------------------------------------------------- //
+  const handelEditButton = (editRows) => {
+    console.log("logging from handel edit button");
+    // console.log(editRows);
+    // console.log(editRows.id);
+    setuserState(editRows);
     commonHandel();
-    setaddEditOrDeleteState("add");
-    setuserState({
-      id: "",
-      name: "",
-      username: "",
-      email: "",
-      bookReturned: "",
-      bookName: "",
-      issueDate: "",
-      returnDate: "",
-    });
+    setuserState(userState);
+    // console.log("loggin id from user state", userState.id);
+    handlingEditSubmission();
+  };
+
+  const handlingEditSubmission = () => {
+    let index = userState.id;
+    console.log("from edit submission", index);
+    // rowData.map((row) => console.log(row.id));
+    rowData.filter((row) => "");
+    // rowData.filter((row) => (!row.id))
   };
 
   // ----------------------------------------------------- Delete Logic -------------------------------------------------- //
-  const delCommonHandel = () => {
-    setdelOpen((prev) => !prev);
+  const handelDeleteButton = (stringforsettingstate, deleteRows) => {
+    console.log("logging from handel delete button");
+    // console.log(editRows);
+    // console.log(editRows.id);
+    seteditOrAddState(stringforsettingstate);
+    setuserState(deleteRows);
+    commonHandel();
+    // setuserState();
+    // console.log("loggin id from user state", userState.id);
+    handlingDeleteSubmission();
   };
 
-  const handelDeleteButton = (deleteRow) => {
-    // console.log(deleteRow);
-    setaddEditOrDeleteState("del");
-    // console.log(addEditOrDeleteState);
-    setuserState(deleteRow);
-    // console.log(userState);
-    const index = deleteRow.id;
-    // rowData.map((eachRow) => console.log(eachRow.id));
-    const updatedArray = rowData.filter((eachRow) => eachRow.id != index);
-    delCommonHandel();
-    console.log(updatedArray);
-    setRowData(updatedArray);
+  const handlingDeleteSubmission = (userState) => {
+    let index = userState.id;
+    console.log("from delete submission", index);
+    rowData.map((row) => console.log(row.id));
+    const exceptDeletedRowData = rowData.filter((row) => console.log(row.id));
+    setRowData(exceptDeletedRowData);
+    // rowData.filter((row) => (!row.id))
   };
 
   //<------------------------------------  Add  user from logic ----------------------------------------->//
@@ -199,7 +190,6 @@ function Grid() {
       issueDate: "",
       returnDate: "",
     });
-    commonHandel();
   };
 
   //-----------end ----------------------//
@@ -258,8 +248,6 @@ function Grid() {
       </div>
 
       <DialogueComp
-        editDataHandler={editDataHandler}
-        addEditOrDeleteState={addEditOrDeleteState}
         pushUserinRowDataStateOnClickOfTheButtton={
           pushUserinRowDataStateOnClickOfTheButtton
         }
@@ -268,7 +256,6 @@ function Grid() {
         commonHandel={commonHandel}
         open={open}
       />
-      <DeleteDialogue commonHandel={delCommonHandel} open={delopen} />
     </>
   );
 }
